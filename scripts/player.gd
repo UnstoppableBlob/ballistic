@@ -29,6 +29,15 @@ func _physics_process(delta):
 			target_angle,
 			1 - exp(-aim_smoothness * delta)
 		)
+	else:
+		if velocity != Vector2.ZERO: 
+			aim = velocity
+			var target_angle = aim.angle()
+			aim_angle = lerp_angle(
+				aim_angle,
+				target_angle,
+				1 - exp(-aim_smoothness * delta)
+			)
 	
 	aim_cont.rotation = aim_angle
 	
@@ -55,7 +64,7 @@ func _physics_process(delta):
 		fire()
 		fire_timer = fire_rate
 	
-	
+	print(velocity)
 	move_and_slide()
 	
 	
