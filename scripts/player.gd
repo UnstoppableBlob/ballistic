@@ -112,4 +112,4 @@ func fire():
 	get_tree().current_scene.add_child(paintball)
 	
 	paintball.global_position = $aim_container/spawner.global_position
-	paintball.global_rotation = aim_angle
+	paintball.direction = Vector2.RIGHT.rotated(aim_angle)

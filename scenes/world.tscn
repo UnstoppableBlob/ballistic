@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://coar0w52ewb50"]
+[gd_scene load_steps=3 format=3 uid="uid://coar0w52ewb50"]
 
 [ext_resource type="PackedScene" uid="uid://be8qbmt0fe144" path="res://scenes/player.tscn" id="1_nnsk1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nnsk1"]
+radius = 53.009434
 
 [node name="World" type="Node2D"]
 
@@ -8,3 +11,9 @@
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3.055, 3.055)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(68, 0)
+shape = SubResource("CircleShape2D_nnsk1")
