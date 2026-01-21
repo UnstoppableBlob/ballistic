@@ -18,12 +18,26 @@ var fire_timer = 0
 
 var aim_line_length = 20
 
+var dash_speed = 260
+var dash_duration = 0.12
+var dash_cooldown = 0.35
+
+var dash_timer = 0
+var dash_cooldown_timer = 0
+var dash_direction = Vector2.ZERO
+var is_dashing = false
+
 @export var paintball_scene : PackedScene
 
 @onready var aim_cont = $aim_container
 
 
 func _physics_process(delta):
+	dash_cooldown_timer -= delta
+	
+	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0:
+		start_dash()
+	
 	var aim = get_aim_vector()
 	
 	if aim != Vector2.ZERO:
@@ -57,6 +71,22 @@ func _physics_process(delta):
 	#if aim_direction.length() > 0.15:
 		#aim_cont.rotation = aim_direction.angle()
 	#
+	
+	if is_dashing:
+		dash_timer -= delta
+		
+		var t = dash_timer / dash_duration
+		var eased_speed = dash_speed * ease_out_cubic(t)
+		
+		velocity = dash_direction * eased_speed
+		move_and_slide()
+		
+		if dash_timer <= 0:
+			is_dashing = false
+			velocity = dash_direction * speed
+			dash_cooldown_timer = dash_cooldown
+		return
+	
 	var input = get_stick_vector()
 	var target_velocity = input * speed
 	
@@ -149,5 +179,19 @@ func update_aim():
 	line.width_curve.add_point(Vector2(0, 1))
 	line.width_curve.add_point(Vector2(1, 0))
 	
-	line.visible = visible
 	
+	
+
+func start_dash():
+	var move = get_stick_vector()
+	if move == Vector2.ZERO:
+		return
+	
+	is_dashing = true
+	dash_timer = dash_duration
+	dash_direction = move.normalized()
+	#else:
+		#dash_direction = Vector2.RIGHT.rotated()
+		
+func ease_out_cubic(t):
+	return 1 - pow(1 - t, 3)
