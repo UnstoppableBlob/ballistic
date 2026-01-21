@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 var speed = 150
-var lifetime = 2
+var lifetime = 20
 
 
 var color = Color.WHITE

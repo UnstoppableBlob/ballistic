@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://be8qbmt0fe144"]
+[gd_scene load_steps=6 format=3 uid="uid://be8qbmt0fe144"]
 
 [ext_resource type="Script" uid="uid://dymxf0txidqa8" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://c0iv6vmjog1bk" path="res://scripts/aim.gd" id="2_g2els"]
@@ -7,6 +7,9 @@
 [sub_resource type="SphereMesh" id="SphereMesh_3vyb7"]
 radius = 4.0
 height = 8.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qhqgy"]
+radius = 4.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_3vyb7")
@@ -22,3 +25,11 @@ position = Vector2(4, 0)
 script = ExtResource("2_g2els")
 
 [node name="spawner" type="Marker2D" parent="aim_container"]
+
+[node name="Line2D" type="Line2D" parent="aim_container"]
+z_index = -2
+width = 1.0
+antialiased = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_qhqgy")
