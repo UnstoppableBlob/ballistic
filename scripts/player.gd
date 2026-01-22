@@ -40,17 +40,17 @@ var can_move = true
 
 
 func _physics_process(delta):
-	can_move = true
 	if Input.is_action_just_pressed("dash"):
 		can_teleport = true
 	
 	if can_teleport:
-		tele.position = velocity
+		tele.position = velocity * 1.8
 		can_move = false
 	
 	if Input.is_action_just_released("dash"):
 		can_teleport = false
 		can_move = true
+		global_position = tele.global_position
 	
 	
 	#dash_cooldown_timer -= delta
@@ -61,6 +61,8 @@ func _physics_process(delta):
 	var aim = get_aim_vector()
 	
 	if aim != Vector2.ZERO:
+		$Node2D/MeshInstance2D.visible = true
+		$Node2D/MeshInstance2D.position = get_aim_vector() * 30
 		var target_angle = aim.angle()
 		aim_angle = lerp_angle(
 			aim_angle,
@@ -69,6 +71,7 @@ func _physics_process(delta):
 		)
 		is_vis = true
 	else:
+		$Node2D/MeshInstance2D.visible = false
 		if velocity != Vector2.ZERO: 
 			aim = velocity
 			var target_angle = aim.angle()
@@ -122,11 +125,9 @@ func _physics_process(delta):
 		fire()
 		fire_timer = fire_rate
 	
-	print(velocity)
 	if can_move:
 		move_and_slide()
 	
-	print(can_move)
 	
 func _draw():
 	draw_circle(Vector2.ZERO, radius, color)
