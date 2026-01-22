@@ -18,6 +18,8 @@ var fire_timer = 0
 
 var aim_line_length = 20
 
+var can_teleport = false
+
 #var dash_speed = 260
 #var dash_duration = 0.12
 #var dash_cooldown = 0.35
@@ -27,12 +29,30 @@ var aim_line_length = 20
 #var dash_direction = Vector2.ZERO
 #var is_dashing = false
 
+var can_move = true
+
 @export var paintball_scene : PackedScene
 
 @onready var aim_cont = $aim_container
+@onready var tele = $teleporter
+
+
 
 
 func _physics_process(delta):
+	can_move = true
+	if Input.is_action_just_pressed("dash"):
+		can_teleport = true
+	
+	if can_teleport:
+		tele.position = velocity
+		can_move = false
+	
+	if Input.is_action_just_released("dash"):
+		can_teleport = false
+		can_move = true
+	
+	
 	#dash_cooldown_timer -= delta
 	
 	#if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0:
@@ -103,13 +123,16 @@ func _physics_process(delta):
 		fire_timer = fire_rate
 	
 	print(velocity)
-	move_and_slide()
+	if can_move:
+		move_and_slide()
 	
+	print(can_move)
 	
 func _draw():
 	draw_circle(Vector2.ZERO, radius, color)
 
 func _ready():
+	can_move = true
 	$MeshInstance2D.visible = false
 	queue_redraw()
 

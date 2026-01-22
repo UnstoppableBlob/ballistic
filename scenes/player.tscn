@@ -33,3 +33,5 @@ antialiased = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_qhqgy")
+
+[node name="teleporter" type="Node2D" parent="."]
