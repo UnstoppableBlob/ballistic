@@ -42,12 +42,14 @@ var can_move = true
 func _physics_process(delta):
 	if Input.is_action_just_pressed("dash"):
 		can_teleport = true
+		speed = 10
 	
 	if can_teleport:
-		tele.position = velocity * 1.8
+		tele.position = velocity.normalized() * 50
 		can_move = false
 	
 	if Input.is_action_just_released("dash"):
+		speed = 40
 		can_teleport = false
 		can_move = true
 		global_position = tele.global_position
@@ -62,7 +64,11 @@ func _physics_process(delta):
 	
 	if aim != Vector2.ZERO:
 		$Node2D/MeshInstance2D.visible = true
-		$Node2D/MeshInstance2D.position = get_aim_vector() * 30
+		$Node2D/MeshInstance2D.position = get_aim_vector().normalized() * 50
+		#var aim_vec = get_aim_vector()
+		#if aim_vec.length() > 0:
+			#$Node2D/MeshInstance2D.position = aim_vec.normalised() * 50
+			#
 		var target_angle = aim.angle()
 		aim_angle = lerp_angle(
 			aim_angle,
