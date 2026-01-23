@@ -42,31 +42,35 @@ var can_move = true
 
 
 func _physics_process(delta):
+	var can_detect = true
 	if Input.is_action_pressed("slow"):
 		#get_tree().paused = true
 		#not_paused = 
+		can_detect = false
 		Engine.time_scale = 0.125
 		
 	else:
 		#get_tree().paused = false
+		can_detect = true
 		Engine.time_scale = 1
 		
 				
-	if Input.is_action_just_pressed("dash"):
-		tele.visible = true
-		can_teleport = true
-		speed = 10
+	if can_detect:
+		if Input.is_action_just_pressed("dash"):
+			tele.visible = true
+			can_teleport = true
+			speed = 10
 	
-	if can_teleport:
-		tele.position = velocity.normalized() * 50
-		can_move = false
-	
-	if Input.is_action_just_released("dash"):
-		tele.visible = false
-		speed = 40
-		can_teleport = false
-		can_move = true
-		global_position = tele.global_position
+		if can_teleport:
+			tele.position = velocity.normalized() * 50
+			can_move = false
+		
+		if Input.is_action_just_released("dash"):
+			tele.visible = false
+			speed = 40
+			can_teleport = false
+			can_move = true
+			global_position = tele.global_position
 	
 	
 	#dash_cooldown_timer -= delta
@@ -76,31 +80,32 @@ func _physics_process(delta):
 	
 	var aim = get_aim_vector()
 	
-	if aim != Vector2.ZERO:
-		$Node2D/MeshInstance2D.visible = true
-		$Node2D/MeshInstance2D.position = get_aim_vector().normalized() * 50
-		#var aim_vec = get_aim_vector()
-		#if aim_vec.length() > 0:
-			#$Node2D/MeshInstance2D.position = aim_vec.normalised() * 50
-			#
-		var target_angle = aim.angle()
-		aim_angle = lerp_angle(
-			aim_angle,
-			target_angle,
-			1 - exp(-aim_smoothness * delta)
-		)
-		is_vis = true
-	else:
-		$Node2D/MeshInstance2D.visible = false
-		if velocity != Vector2.ZERO: 
-			aim = velocity
+	if !can_teleport:
+		if aim != Vector2.ZERO:
+			$Node2D/MeshInstance2D.visible = true
+			$Node2D/MeshInstance2D.position = get_aim_vector().normalized() * 50
+			#var aim_vec = get_aim_vector()
+			#if aim_vec.length() > 0:
+				#$Node2D/MeshInstance2D.position = aim_vec.normalised() * 50
+				#
 			var target_angle = aim.angle()
 			aim_angle = lerp_angle(
 				aim_angle,
 				target_angle,
 				1 - exp(-aim_smoothness * delta)
 			)
-			is_vis = false
+			is_vis = true
+		else:
+			$Node2D/MeshInstance2D.visible = false
+			if velocity != Vector2.ZERO: 
+				aim = velocity
+				var target_angle = aim.angle()
+				aim_angle = lerp_angle(
+					aim_angle,
+					target_angle,
+					1 - exp(-aim_smoothness * delta)
+				)
+				is_vis = false
 			
 	update_aim()
 	

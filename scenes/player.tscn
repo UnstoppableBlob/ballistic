@@ -16,7 +16,6 @@ radius = 4.0
 [sub_resource type="SphereMesh" id="SphereMesh_dqkch"]
 
 [node name="Player" type="CharacterBody2D"]
-process_mode = 3
 script = ExtResource("1_3vyb7")
 paintball_scene = ExtResource("2_qhqgy")
 
@@ -40,7 +39,6 @@ antialiased = true
 shape = SubResource("CircleShape2D_qhqgy")
 
 [node name="teleporter" type="Node2D" parent="."]
-process_mode = 3
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="teleporter"]
 mesh = SubResource("SphereMesh_qhqgy")
