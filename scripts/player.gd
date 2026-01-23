@@ -16,7 +16,7 @@ var is_vis = false
 var fire_rate = 0.15
 var fire_timer = 0
 
-var not_paused = true
+#var not_paused = true
 
 var aim_line_length = 20
 
@@ -44,12 +44,16 @@ var can_move = true
 func _physics_process(delta):
 	if Input.is_action_pressed("slow"):
 		#get_tree().paused = true
-		not_paused = false
+		#not_paused = 
+		Engine.time_scale = 0.125
+		
 	else:
 		#get_tree().paused = false
-		not_paused = true
+		Engine.time_scale = 1
 		
+				
 	if Input.is_action_just_pressed("dash"):
+		tele.visible = true
 		can_teleport = true
 		speed = 10
 	
@@ -58,6 +62,7 @@ func _physics_process(delta):
 		can_move = false
 	
 	if Input.is_action_just_released("dash"):
+		tele.visible = false
 		speed = 40
 		can_teleport = false
 		can_move = true
@@ -153,8 +158,6 @@ func _ready():
 	queue_redraw()
 
 func get_stick_vector() -> Vector2:
-	if !not_paused:
-		return Vector2.ZERO
 	var v = Vector2(
 		Input.get_action_strength("right") - Input.get_action_strength("left"),
 		Input.get_action_strength("down") - Input.get_action_strength("up")
@@ -202,7 +205,7 @@ func update_aim():
 		line.visible = false
 		return
 	else:
-		line.visible = true
+		line.visible = false
 	
 	line.clear_points()
 	
