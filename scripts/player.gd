@@ -46,6 +46,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("slow"):
 		#get_tree().paused = true
 		#not_paused = 
+		$Node2D/MeshInstance2D.visible = false
 		can_detect = false
 		Engine.time_scale = 0.125
 		
@@ -80,7 +81,7 @@ func _physics_process(delta):
 	
 	var aim = get_aim_vector()
 	
-	if !can_teleport:
+	if !can_teleport && can_detect:
 		if aim != Vector2.ZERO:
 			$Node2D/MeshInstance2D.visible = true
 			$Node2D/MeshInstance2D.position = get_aim_vector().normalized() * 50
@@ -149,6 +150,9 @@ func _physics_process(delta):
 	if Input.is_action_pressed("fire") and fire_timer <= 0:
 		fire()
 		fire_timer = fire_rate
+	
+	if !can_detect:
+		aim_cont.rotation = velocity.angle()
 	
 	if can_move:
 		move_and_slide()
